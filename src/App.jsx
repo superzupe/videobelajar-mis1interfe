@@ -1,8 +1,11 @@
 // import { useState } from 'react'
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
-    <h1 className="text-yellow-900 font-bold">Haloooo ini tailwind udah mulai kah</h1>
+    <>
+      <LoginPage />
+    </>
   );
 }
 
