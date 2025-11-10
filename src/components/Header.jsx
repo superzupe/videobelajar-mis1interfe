@@ -1,14 +1,18 @@
-import Logo from "../assets/icon/videobelajar-icon.png";
-import Profile from "../assets/icon/profile-avatar.png";
+import { videobelajarLogo } from "../assets";
+import { profileAvatar } from "../assets";
 
 const Header = ({ type = "simple" }) => {
   const isMain = type === "main";
 
   return (
     <>
-      <header className="flex flex-row justify-between items-center fixed inset-x-0 h-20  px-6 bg-bg-main border-b border-border-medium shadow-[0px 8px 36px rgba(0, 0, 0, 0.1)] md:px-30 md:shadow-none">
+      <header className=" fixed top-0 left-0 flex flex-row justify-between items-center w-full h-20 px-6 bg-bg-main border-b border-border-medium shadow-lg md:px-30 md:shadow-none">
         <a href="#">
-          <img src={Logo} alt="videobelajar logo" className="w-48" />
+          <img
+            src={videobelajarLogo}
+            alt="videobelajar logo"
+            className="w-48"
+          />
         </a>
 
         {isMain && (
@@ -21,7 +25,7 @@ const Header = ({ type = "simple" }) => {
             </a>
             <a href="#">
               <img
-                src={Profile}
+                src={profileAvatar}
                 alt="profile-avatar"
                 class="nav-avatar"
               />

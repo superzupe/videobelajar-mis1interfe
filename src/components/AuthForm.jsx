@@ -1,14 +1,219 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import GoogleLogo from "../assets/icon/google-icon.svg"
+import { useState } from "react";
+import { flagID, flagKR, flagTH, flagUS, googleLogo } from "../assets";
+import { FaEye, FaEyeDropper, FaEyeSlash } from "react-icons/fa";
+import { FaAngleUp, FaAngleDown } from "react-icons/fa";
+
+const InputField = ({ id, type, required = false, label }) => {
+  const [value, setValue] = useState("");
+
+  return (
+    <div className="flex flex-col items-start gap-3 md:gap-4">
+      <label
+        htmlFor={id}
+        className="text-sm font-normal text-text-base md:text-base"
+      >
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <input
+        type={type}
+        id={id}
+        name={id}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        autoComplete={id}
+        required={required}
+        className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
+      />
+    </div>
+  );
+};
+
+const PhoneField = () => {
+  const [countryCode, setCountryCode] = useState("+62");
+  const [value, setValue] = useState("");
+
+  const countries = [
+    { code: "+62", label: "Indonesia", flag: flagID },
+    { code: "+82", label: "Korea", flag: flagKR },
+    { code: "+66", label: "Thailand", flag: flagTH },
+    { code: "+1", label: "USA", flag: flagUS },
+  ];
+
+  const CountryDropdown = ({ selected, onSelect }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleSelect = (code) => {
+      onSelect(code);
+      setIsOpen(false);
+    };
+
+    const current = countries.find((c) => c.code === selected);
+    return (
+      <>
+        <div className="relative flex flex-row w-full max-w-36 cursor-pointer rounded-md">
+          <div className="relative flex justify-center items-center bg-gray-100 border border-border-medium px-5 py-4 rounded-tl-md rounded-bl-md">
+            <img
+              src={current.flag}
+              alt={current.label}
+              className="absolute z-10 w-5"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex flex-row justify-between w-full p-2 text-sm text-text-main border border-border-light rounded-br-md rounded-tr-md md:text-base hover:ring-2 hover:ring-border-medium"
+          >
+            <span>{current.code}</span>
+            <span className="flex justify-center items-center">
+              <FaAngleDown className="text-gray-400 text-xl" />
+            </span>
+          </button>
+
+          {isOpen && (
+            <ul className="absolute z-10 flex flex-col justify-center w-full bg-bg-main border-2 border-border-medium rounded-md">
+              {countries.map((c) => {
+                return (
+                  <li
+                    key={c.code}
+                    data-value={c.code}
+                    onClick={() => handleSelect(c.code)}
+                    className="flex flex-row justify-start w-full gap-2 px-4 py-2 text-sm text-text-main border border-border-light cursor-pointer md:text-base hover:ring-2 hover:ring-border-medium"
+                  >
+                    <img src={c.flag} alt={c.label} className="w-5" />
+                    <span>{c.label}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <div className="flex flex-col w-full items-start gap-3 md:gap-4">
+        <label
+          htmlFor="tel"
+          className="text-sm font-normal text-text-base md:text-base"
+        >
+          No. Hp
+          <span className="text-red-500"> *</span>
+        </label>
+        <div className="flex flex-row gap-3 w-full justify-center items-center">
+          <CountryDropdown
+            selected={countryCode}
+            onSelect={(code) => setCountryCode(code)}
+          />
+          <input
+            type="tel"
+            id="tel"
+            name="tel"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            autoComplete="tel-country-code"
+            required
+            className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+const PasswordField = ({ id, label, type }) => {
+  const isLogin = type === "login";
+  const [visible, setVisible] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const showPassword = () => {
+    setVisible(!visible);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col items-start gap-3 md:gap-4">
+        <label
+          htmlFor={id}
+          className="text-sm font-normal text-text-base md:text-base"
+        >
+          {label} <span className="text-red-500"> *</span>
+        </label>
+        <div className="relative w-full">
+          {visible && (
+            <input
+              type="text"
+              id={id}
+              name={id}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete={
+                type === isLogin ? "current-password" : "new-password"
+              }
+              required
+              className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
+            />
+          )}
+          {!visible && (
+            <input
+              type="password"
+              id={id}
+              name={id}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete={
+                type === isLogin ? "current-password" : "new-password"
+              }
+              required
+              className=" w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
+            />
+          )}
+          <button
+            type="button"
+            onClick={showPassword}
+            className="absolute z-10 right-4 translate-y-1/2"
+          >
+            {visible ? (
+              <FaEye className="text-gray-400 text-xl" />
+            ) : (
+              <FaEyeSlash className="text-gray-400 text-xl" />
+            )}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+//TINGGAL ATUR SWITCH PERHALAMANNYA, BELAJAR ROUTES PATH, HASH DLL
+const AuthButton = ({ type }) => {
+  const classBase =
+    "px-0 py-2 font-bold text-sm border-none rounded-lg cursor-pointer md:px-0 md:py-2.5 md:text-base";
+
+  const variant = {
+    primary: "bg-btn-primary text-text-inverse hover:bg-btn-primary-hover",
+    secondary: "bg-btn-accent text-btn-primary hover:bg-btn-accent-hover",
+  };
+
+  const isLogin = type === "login";
+  return (
+    <>
+      <button type="submit" className={`${classBase} ${variant.primary}`}>
+        {isLogin ? "Masuk" : "Daftar"}
+      </button>
+      <button type="button" className={`${classBase} ${variant.secondary}`}>
+        {isLogin ? "Daftar" : "Masuk"}
+      </button>
+    </>
+  );
+};
 
 const AuthForm = ({ type }) => {
   const isLogin = type === "login";
-//TINGGAL SET TAILWIND NYA, BENTAR YA
-//INI MASIH BISA DIPECAH JADI BBRAPA KOMPONEN LAGI, LALU MENGGUNAKAN PROPS SEBAGAI VALIDASI, TAPI BENTAR YA
   return (
     <>
-      <section className="flex justify-center items-center min-h-screen px-5 py-7 md:px-30 md:py-16">
+      <section className="flex justify-center items-center px-5 py-7 mt-18 md:px-30 md:py-16">
         <div className="flex flex-col justify-center items-center text-center w-full max-w-80 p-5 gap-5 bg-bg-main border border-border-light rounded-sm md:max-w-148 md:p-9 md:gap-9">
           <div className="flex flex-col gap-2">
             <h3 className="font-poppins text-2xl font-semibold text-text-main md:text-3xl">
@@ -22,105 +227,44 @@ const AuthForm = ({ type }) => {
           </div>
 
           <form className="flex flex-col gap-5 md:gap-6">
-            <div className="flex flex-col w-70 gap-6 md:w-129">
+            <div className="flex flex-col w-full min-w-70 gap-6 md:min-w-129">
               {!isLogin && (
-                <div className="flex flex-col items-start gap-3 md:gap-4">
-                  <label
-                    for="nama"
-                    className="text-sm font-normal text-text-base md:text-base"
-                  >
-                    Nama Lengkap <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="nama"
-                    name="nama"
-                    autocomplete="name"
-                    required
-                    className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
-                  />
-                </div>
+                <InputField
+                  id="name"
+                  type="text"
+                  required={true}
+                  label="Nama Lengkap"
+                />
+              )}
+              <InputField
+                id="email"
+                type="email"
+                required={true}
+                label="E-mail"
+              />
+              {isLogin && (
+                <PasswordField
+                  id="password"
+                  label="Masukkan Sandi"
+                  type="login"
+                />
               )}
 
-              <div className="flex flex-col items-start gap-3 md:gap-4">
-                <label
-                  for="email"
-                  className="text-sm font-normal text-text-base md:text-base"
-                >
-                  E-mail <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  autocomplete="email"
-                  required
-                  className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
-                />
-              </div>
-
-              {/* {!isLogin && (
-                <div className="flex flex-col items-start gap-3 md:gap-4">
-                  <label for="phone"  className="text-sm font-normal text-text-base md:text-base">
-                    No. Hp <span className="text-red-500">*</span>
-                  </label>
-                  <div class="form-phone">
-                    <select id="countryCode"className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium phone">
-                      <option value="+62">🇮🇩 +62</option>
-                      <option value="+60">🇲🇾 +60</option>
-                      <option value="+1">🇺🇸 +1</option>
-                      <option value="+44">🇬🇧 +44</option>
-                    </select>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      autocomplete="tel-country-code"
-                      required
-                      class="form-input"
-                    />
-                  </div>
-                </div>
-              )} */}
-
-              <div className="flex flex-col items-start gap-3 md:gap-4">
-                <label
-                  for="sandi"
-                  className="text-sm font-normal text-text-base md:text-base"
-                >
-                  Kata Sandi <span className="text-red-500">*</span>
-                </label>
-                <div class="password-input">
-                  <input
-                    type="password"
-                    id="sandi"
-                    name="sandi"
-                    autocomplete="current-password"
-                    required
-                    className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
+              {!isLogin && (
+                <>
+                  <PhoneField />
+                  <PasswordField
+                    id="password"
+                    label="Masukkan Sandi"
+                    type="register"
                   />
-                  <button></button>
-                </div>
-              </div>
-
-              {/* {!isLogin && (<div className="flex flex-col items-start gap-3 md:gap-4">
-                <label for="confirm"  className="text-sm font-normal text-text-base md:text-base">
-                  Konfirmasi Kata Sandi <span className="text-red-500">*</span>
-                </label>
-                <div class="password-input">
-                  <input
-                    type="password"
-                    id="confirm"
-                    name="confirm"
-                    autocomplete="current-password"
-                    required
-                   className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
+                  <PasswordField
+                    id="confirmPassword"
+                    label="Konfirmasi Sandi"
+                    type="register"
                   />
-                  <button>
-                    <i class="fa-solid fa-eye-slash"></i>
-                  </button>
-                </div>
-              </div>)} */}
+                </>
+              )}
 
               <div className="text-end">
                 <a
@@ -131,19 +275,10 @@ const AuthForm = ({ type }) => {
                 </a>
               </div>
             </div>
+
             <div className="flex flex-col w-full max-w-70 min-h-25 gap-4 md:max-w-129">
-              <button
-                type="submit"
-                className="px-0 py-2 font-bold text-sm border-none rounded-lg cursor-pointer md:px-0 md:py-2.5 md:text-base bg-btn-primary text-text-inverse hover:bg-btn-primary-hover"
-              >
-                {isLogin ? "Masuk" : "Daftar"}
-              </button>
-              <a
-                href="#"
-                className="px-0 py-2 font-bold text-sm border-none rounded-lg cursor-pointer md:px-0 md:py-2.5 md:text-base bg-btn-accent text-btn-primary hover:bg-btn-accent-hover"
-              >
-                {isLogin ? "Daftar" : "Masuk"}
-              </a>
+              {isLogin && <AuthButton type="login"/>}
+              {!isLogin && <AuthButton type="register"/>}
             </div>
 
             <div className="flex items-center gap-2.5">
@@ -156,7 +291,7 @@ const AuthForm = ({ type }) => {
               type="button"
               className="flex flex-row justify-center items-center w-full max-w-70 px-0 py-2 gap-2 bg-bg-main border border-border-light rounded-lg cursor-pointer hover:border-border-medium md:max-w-129 md:py-2.5"
             >
-              <img src={GoogleLogo} alt="google-icon" />
+              <img src={googleLogo} alt="Google Icon" />
               <span className="text-sm font-bold text-text-gray md:text-base ">
                 Masuk dengan Google
               </span>
