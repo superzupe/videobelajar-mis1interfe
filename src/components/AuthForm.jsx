@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { flagID, flagKR, flagTH, flagUS, googleLogo } from "../assets";
-import { FaEye, FaEyeDropper, FaEyeSlash } from "react-icons/fa";
-import { FaAngleUp, FaAngleDown } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {HiChevronDown } from "react-icons/hi";
 
 const InputField = ({ id, type, required = false, label }) => {
   const [value, setValue] = useState("");
@@ -65,7 +65,7 @@ const PhoneField = () => {
           >
             <span>{current.code}</span>
             <span className="flex justify-center items-center">
-              <FaAngleDown className="text-gray-400 text-xl" />
+              <HiChevronDown className="text-gray-400 text-xl" />
             </span>
           </button>
 

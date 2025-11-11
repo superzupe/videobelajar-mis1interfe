@@ -33,7 +33,7 @@
 }
 
 body {
-    @apply bg-bg-base font-poppins;
+    @apply bg-bg-base font-sans;
 }
 
 @layer base {
