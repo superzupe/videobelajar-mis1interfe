@@ -6,7 +6,7 @@
 
 @theme {
     --color-bg-base: #FFFFF0;
-     --color-bg-main: #ffffff;
+    --color-bg-main: #ffffff;
     --color-bg-overlay: #000000CC;
 
     --color-border-light: #f1f1f1;
@@ -35,6 +35,20 @@
 body {
     @apply bg-bg-base font-sans;
 }
+
+.clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    transition: all 0.3s ease-in-out;
+}
+
+.group:hover .clamp-2 {
+    -webkit-line-clamp: unset;
+}
+
+
 
 @layer base {
 
