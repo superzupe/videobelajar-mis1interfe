@@ -169,7 +169,7 @@ const PasswordField = ({ id, label, type, value, onChange }) => {
           <button
             type="button"
             onClick={showPassword}
-            className="absolute z-10 right-4 translate-y-1/2"
+            className="absolute z-10 right-4 translate-y-1/2 cursor-pointer"
           >
             {visible ? (
               <FaEye className="text-gray-400 text-xl" />
@@ -244,107 +244,106 @@ const AuthForm = ({ type }) => {
   };
 
   return (
-    <>
-      <section className="flex justify-center items-center px-5 py-7 mt-18 md:px-30 md:py-16">
-        <div className="flex flex-col justify-center items-center text-center w-full max-w-80 p-5 gap-5 bg-bg-main border border-border-light rounded-sm md:max-w-148 md:p-9 md:gap-9">
-          <div className="flex flex-col gap-2">
-            <h3 className="font-poppins text-2xl font-semibold text-text-main md:text-3xl">
-              {isLogin ? "Masuk ke Akun" : "Pendaftaran Akun"}
-            </h3>
-            <p className="text-sm font-normal text-text-base md:text-base">
-              {isLogin
-                ? "Yuk, lanjutin belajarmu di videobelajar."
-                : "Yuk, daftarkan akunmu sekarang juga!"}
-            </p>
-          </div>
+    <section
+      className={`min-h-screen flex justify-center items-center ${
+        !isLogin && "mt-18"
+      }  px-5 py-7 md:px-30 md:py-16`}
+    >
+      <div className="flex flex-col justify-center items-center text-center w-full max-w-80 p-5 gap-5 bg-bg-main border border-border-light rounded-sm md:max-w-148 md:p-9 md:gap-9">
+        <div className="flex flex-col gap-2">
+          <h3 className="font-poppins text-2xl font-semibold text-text-main md:text-3xl">
+            {isLogin ? "Masuk ke Akun" : "Pendaftaran Akun"}
+          </h3>
+          <p className="text-sm font-normal text-text-base md:text-base">
+            {isLogin
+              ? "Yuk, lanjutin belajarmu di videobelajar."
+              : "Yuk, daftarkan akunmu sekarang juga!"}
+          </p>
+        </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-5 md:gap-6"
-          >
-            <div className="flex flex-col w-full min-w-70 gap-6 md:min-w-129">
-              {!isLogin && (
-                <InputField
-                  id="name"
-                  type="text"
-                  required={true}
-                  label="Nama Lengkap"
-                  value={name}
-                  onChange={setName}
-                />
-              )}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6">
+          <div className="flex flex-col w-full min-w-70 gap-6 md:min-w-129">
+            {!isLogin && (
               <InputField
-                id="email"
-                type="email"
+                id="name"
+                type="text"
                 required={true}
-                label="E-mail"
-                value={email}
-                onChange={setEmail}
+                label="Nama Lengkap"
+                value={name}
+                onChange={setName}
               />
-              {isLogin && (
+            )}
+            <InputField
+              id="email"
+              type="email"
+              required={true}
+              label="E-mail"
+              value={email}
+              onChange={setEmail}
+            />
+            {isLogin && (
+              <PasswordField
+                id="password"
+                label="Masukkan Sandi"
+                type="login"
+                value={password}
+                onChange={setPassword}
+              />
+            )}
+
+            {!isLogin && (
+              <>
+                <PhoneField value={phone} onChange={setPhone} />
                 <PasswordField
                   id="password"
                   label="Masukkan Sandi"
-                  type="login"
+                  type="register"
                   value={password}
                   onChange={setPassword}
                 />
-              )}
+                <PasswordField
+                  id="confirmPassword"
+                  label="Konfirmasi Sandi"
+                  type="register"
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                />
+              </>
+            )}
 
-              {!isLogin && (
-                <>
-                  <PhoneField value={phone} onChange={setPhone} />
-                  <PasswordField
-                    id="password"
-                    label="Masukkan Sandi"
-                    type="register"
-                    value={password}
-                    onChange={setPassword}
-                  />
-                  <PasswordField
-                    id="confirmPassword"
-                    label="Konfirmasi Sandi"
-                    type="register"
-                    value={confirmPassword}
-                    onChange={setConfirmPassword}
-                  />
-                </>
-              )}
-
-              <div className="text-end">
-                <a
-                  href="#"
-                  className="text-sm font-semibold text-text-gray hover:text-text-base md:text-base "
-                >
-                  Lupa password?
-                </a>
-              </div>
+            <div className="text-end">
+              <a
+                href="#"
+                className="text-sm font-semibold text-text-gray hover:text-text-base md:text-base "
+              >
+                Lupa password?
+              </a>
             </div>
+          </div>
 
-            <div className="flex flex-col w-full max-w-70 min-h-25 gap-4 md:max-w-129">
-              {isLogin && <AuthButton type="login" />}
-              {!isLogin && <AuthButton type="register" />}
-            </div>
+          <div className="flex flex-col w-full max-w-70 min-h-25 gap-4 md:max-w-129">
+            {isLogin && <AuthButton type="login" />}
+            {!isLogin && <AuthButton type="register" />}
+          </div>
 
-            <div className="flex items-center gap-2.5">
-              <div className="flex-1 h-px bg-border-light "></div>
-              <span className="text-sm font-normal text-text-base">atau</span>
-              <div className="flex-1 h-px bg-border-light"></div>
-            </div>
+          <div className="flex items-center gap-2.5">
+            <div className="flex-1 h-px bg-border-light "></div>
+            <span className="text-sm font-normal text-text-base">atau</span>
+            <div className="flex-1 h-px bg-border-light"></div>
+          </div>
 
-            <button
-              type="button"
-              className="flex flex-row justify-center items-center w-full max-w-70 px-0 py-2 gap-2 bg-bg-main border border-border-light rounded-lg cursor-pointer hover:border-border-medium md:max-w-129 md:py-2.5"
-            >
-              <img src={googleLogo} alt="Google Icon" />
-              <span className="text-sm font-bold text-text-gray md:text-base ">
-                Masuk dengan Google
-              </span>
-            </button>
-          </form>
-        </div>
-      </section>
-    </>
+          <button
+            type="button"
+            className="flex flex-row justify-center items-center w-full max-w-70 px-0 py-2 gap-2 bg-bg-main border border-border-light rounded-lg cursor-pointer hover:border-border-medium md:max-w-129 md:py-2.5"
+          >
+            <img src={googleLogo} alt="Google Icon" />
+            <span className="text-sm font-bold text-text-gray md:text-base ">
+              Masuk dengan Google
+            </span>
+          </button>
+        </form>
+      </div>
+    </section>
   );
 };
 
