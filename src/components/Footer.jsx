@@ -8,7 +8,6 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-//TINGGAL A HREF?
 const FooterLink = () => {
   const link = [
     {
@@ -70,7 +69,6 @@ const FooterLink = () => {
                 {showList[index] ? <HiChevronDown /> : <HiChevronRight />}
               </button>
             </div>
-            {/** ADD SMOOTH TRANSITION */}
             {showList[index] && (
               <ul className="flex flex-col gap-1 md:hidden">
                 {item.items.map((e, i) => (
@@ -123,10 +121,10 @@ const socialLink = [<FaLinkedinIn />, <FaFacebookF/>, <FaInstagram/>, <FaTwitter
       <div className="w-full h-px mt-2.5 md:mt-8 bg-border-medium"></div>
       <div className="flex flex-col justify-start w-full max-w-xs gap-3 md:flex-row-reverse md:justify-between md:max-w-7xl">
         <ul className="flex flex-row gap-4">
-          {socialLink.map((item) => (
-            <li className="flex justify-center items-center w-9 h-9 p-1 border border-border-dark rounded-full hover:border-border-medium transition-all duration-300 ease-in-out">
+          {socialLink.map((element, index) => (
+            <li key={index} className="flex justify-center items-center w-9 h-9 p-1 border border-border-dark rounded-full hover:border-border-medium transition-all duration-300 ease-in-out">
               <a href="#" className="text-text-main">
-                {item}
+                {element}
               </a>
             </li>
           ))}

@@ -1,8 +1,8 @@
 import { bannerHero } from "../assets";
 
-const HeroSection = () => {
+const HeroSection = ({onScrollToCard}) => {
   return (
-    <section className="relative mt-30 mb-10 mx-auto md:mt-35 md:mb-16 w-full max-w-xs  md:min-w-7xl">
+    <section className="relative mt-30 mb-10 mx-auto md:mt-35 md:mb-16 w-full max-w-xs  md:max-w-7xl">
       {/**Image */}
       <div
         className="absolute inset-0 bg-cover bg-center rounded-xl"
@@ -13,7 +13,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-linear-to-b from-bg-overlay to-bg-overlay rounded-xl"></div>
 
       {/**Content */}
-      <div className="relative z-10 flex flex-col items-center px-5 py-10 md:pt-20 md:pb-16 md:px-42 gap-6 text-text-inverse">
+      <div className="relative z-10 flex flex-col flex-wrap items-center px-5 py-10 md:pt-20 md:pb-16 md:px-42 gap-6 text-text-inverse">
         <div className="flex flex-col text-center gap-3">
           <h1 className="font-poppins font-bold text-2xl md:text-5xl">
             Revolusi Pembelajaran: Temukan Ilmu Baru melalui Platform Video
@@ -26,8 +26,7 @@ const HeroSection = () => {
             pemahaman Anda.
           </p>
         </div>
-        {/**BUTTON ONCLICK KEMANA? */}
-        <button className="w-full max-w-2xs md:max-w-92 min-h-10 md:min-h-11 md:font-bold bg-btn-primary hover:bg-btn-primary-hover font-normal text-sm md:text-base rounded-xl cursor-pointer">
+        <button onClick={onScrollToCard} className="w-full max-w-2xs md:max-w-92 min-h-10 md:min-h-11 md:font-bold bg-btn-primary hover:bg-btn-primary-hover font-normal text-sm md:text-base rounded-xl cursor-pointer">
           Temukan Video Course untuk Dipelajari!
         </button>
       </div>

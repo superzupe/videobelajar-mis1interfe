@@ -1,5 +1,5 @@
 import { courses } from "../data/coursesData";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, forwardRef } from "react";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const ScrollableTabs = () => {
@@ -96,9 +96,14 @@ const Card = () => {
                 <h2 className=" font-poppins font-semibold text-base text-text-main md:text-base">
                   {course.title}
                 </h2>
-                <p class="hidden md:block font-medium text-sm md:text-base text-text-base clamp-2 transition-all duration-300 ease-in-out">
+                <div className="hidden md:block">
+                <p
+                  className="font-medium text-sm md:text-base text-text-base clamp-2 transition-all duration-300 ease-in-out"
+                  //JELEK PAS DI HOVER, KASIH SMOOTH DONG KAKA
+                >
                   {course.description}
                 </p>
+                </div>
               </div>
               <div className="flex flex-row gap-2 md:gap-2.5">
                 <img
@@ -141,9 +146,10 @@ const Card = () => {
   );
 };
 
-const CardSection = () => {
+const CardSection = forwardRef((props, ref) => {
   return (
     <section
+      ref={ref}
       className="flex flex-col width-full max-w-xs mx-auto gap-4 md:max-w-7xl md:gap-5"
       id="all Videos"
     >
@@ -159,6 +165,6 @@ const CardSection = () => {
       <Card />
     </section>
   );
-};
+});
 
 export default CardSection;

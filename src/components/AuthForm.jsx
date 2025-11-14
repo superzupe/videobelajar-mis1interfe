@@ -1,11 +1,10 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { flagID, flagKR, flagTH, flagUS, googleLogo } from "../assets";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import {HiChevronDown } from "react-icons/hi";
+import { HiChevronDown } from "react-icons/hi";
 
-const InputField = ({ id, type, required = false, label }) => {
-  const [value, setValue] = useState("");
-
+const InputField = ({ id, type, required = false, label, value, onChange }) => {
   return (
     <div className="flex flex-col items-start gap-3 md:gap-4">
       <label
@@ -19,7 +18,7 @@ const InputField = ({ id, type, required = false, label }) => {
         id={id}
         name={id}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         autoComplete={id}
         required={required}
         className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
@@ -28,10 +27,9 @@ const InputField = ({ id, type, required = false, label }) => {
   );
 };
 
-const PhoneField = () => {
+const PhoneField = ({ value, onChange }) => {
   const [countryCode, setCountryCode] = useState("+62");
-  const [value, setValue] = useState("");
-
+  //meniritku ini code negaranya masih read only, belum masuk ke value input
   const countries = [
     { code: "+62", label: "Indonesia", flag: flagID },
     { code: "+82", label: "Korea", flag: flagKR },
@@ -111,7 +109,7 @@ const PhoneField = () => {
             id="tel"
             name="tel"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => onChange(e.target.value)}
             autoComplete="tel-country-code"
             required
             className="w-full px-4 py-2 text-sm text-text-main border border-border-light rounded-md md:text-base focus:outline-0 focus:ring-2 focus:ring-border-medium"
@@ -122,10 +120,9 @@ const PhoneField = () => {
   );
 };
 
-const PasswordField = ({ id, label, type }) => {
+const PasswordField = ({ id, label, type, value, onChange }) => {
   const isLogin = type === "login";
   const [visible, setVisible] = useState(false);
-  const [password, setPassword] = useState("");
 
   const showPassword = () => {
     setVisible(!visible);
@@ -146,8 +143,8 @@ const PasswordField = ({ id, label, type }) => {
               type="text"
               id={id}
               name={id}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
               autoComplete={
                 type === isLogin ? "current-password" : "new-password"
               }
@@ -160,8 +157,8 @@ const PasswordField = ({ id, label, type }) => {
               type="password"
               id={id}
               name={id}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
               autoComplete={
                 type === isLogin ? "current-password" : "new-password"
               }
@@ -186,7 +183,6 @@ const PasswordField = ({ id, label, type }) => {
   );
 };
 
-//TINGGAL ATUR SWITCH PERHALAMANNYA, BELAJAR ROUTES PATH, HASH DLL
 const AuthButton = ({ type }) => {
   const classBase =
     "px-0 py-2 font-bold text-sm border-none rounded-lg cursor-pointer md:px-0 md:py-2.5 md:text-base";
@@ -202,15 +198,51 @@ const AuthButton = ({ type }) => {
       <button type="submit" className={`${classBase} ${variant.primary}`}>
         {isLogin ? "Masuk" : "Daftar"}
       </button>
-      <button type="button" className={`${classBase} ${variant.secondary}`}>
+      <Link
+        to={isLogin ? "/register" : "/login"}
+        className={`${classBase} ${variant.secondary}`}
+      >
         {isLogin ? "Daftar" : "Masuk"}
-      </button>
+      </Link>
     </>
   );
 };
 
 const AuthForm = ({ type }) => {
+  const navigate = useNavigate(); //gunain ini unutk navigate ke home ketika semua input yang require terisi
   const isLogin = type === "login";
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const isValid = isLogin
+      ? email.trim() && password.trim()
+      : name.trim() &&
+        email.trim() &&
+        phone.trim() &&
+        password.trim() &&
+        confirmPassword.trim();
+
+    if (!isValid) {
+      alert("Semua input wajib diisi!");
+      return;
+    }
+    if (!isLogin) {
+      if (password !== confirmPassword) {
+        alert("Password tidak cocok, ulangi!");
+        return;
+      }
+    }
+
+    navigate("/home");
+  };
+
   return (
     <>
       <section className="flex justify-center items-center px-5 py-7 mt-18 md:px-30 md:py-16">
@@ -226,7 +258,10 @@ const AuthForm = ({ type }) => {
             </p>
           </div>
 
-          <form className="flex flex-col gap-5 md:gap-6">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-5 md:gap-6"
+          >
             <div className="flex flex-col w-full min-w-70 gap-6 md:min-w-129">
               {!isLogin && (
                 <InputField
@@ -234,6 +269,8 @@ const AuthForm = ({ type }) => {
                   type="text"
                   required={true}
                   label="Nama Lengkap"
+                  value={name}
+                  onChange={setName}
                 />
               )}
               <InputField
@@ -241,27 +278,35 @@ const AuthForm = ({ type }) => {
                 type="email"
                 required={true}
                 label="E-mail"
+                value={email}
+                onChange={setEmail}
               />
               {isLogin && (
                 <PasswordField
                   id="password"
                   label="Masukkan Sandi"
                   type="login"
+                  value={password}
+                  onChange={setPassword}
                 />
               )}
 
               {!isLogin && (
                 <>
-                  <PhoneField />
+                  <PhoneField value={phone} onChange={setPhone} />
                   <PasswordField
                     id="password"
                     label="Masukkan Sandi"
                     type="register"
+                    value={password}
+                    onChange={setPassword}
                   />
                   <PasswordField
                     id="confirmPassword"
                     label="Konfirmasi Sandi"
                     type="register"
+                    value={confirmPassword}
+                    onChange={setConfirmPassword}
                   />
                 </>
               )}
@@ -277,8 +322,8 @@ const AuthForm = ({ type }) => {
             </div>
 
             <div className="flex flex-col w-full max-w-70 min-h-25 gap-4 md:max-w-129">
-              {isLogin && <AuthButton type="login"/>}
-              {!isLogin && <AuthButton type="register"/>}
+              {isLogin && <AuthButton type="login" />}
+              {!isLogin && <AuthButton type="register" />}
             </div>
 
             <div className="flex items-center gap-2.5">

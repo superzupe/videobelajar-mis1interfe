@@ -3,7 +3,6 @@ import { bannerCTA } from "../assets";
 
 const CTASection = () => {
     const [value, setValue] = useState("");
- //ANJIR SELESAI COKS!!
     return (
       <>
         <section className="relative flex flex-col items-center mx-auto my-16 w-full max-w-xs md:max-w-7xl">

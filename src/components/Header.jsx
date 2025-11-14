@@ -1,15 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { videobelajarLogo, profileAvatar, barsIcon,logoutIcon } from "../assets";
+import {
+  videobelajarLogo,
+  profileAvatar,
+  barsIcon,
+  logoutIcon,
+} from "../assets";
 
 const Header = ({ type = "simple" }) => {
   const isMain = type === "main";
   const [showMenu, setShowMenu] = useState(false);
-  //buka tutup buka tutup tambahkan useEffect ya
   const handleShow = () => {
     setShowMenu(!showMenu);
   };
-  //ini benerin yaaa
+
+  const navigate = useNavigate();
+
+  const goLogout = () => {
+    navigate("/login");
+  };
+
   const menuItems = [
     { id: 1, label: "Profile Saya" },
     { id: 2, label: "Kelas Saya" },
@@ -31,7 +42,7 @@ const Header = ({ type = "simple" }) => {
         {isMain && (
           <div className="md:relative">
             <button onClick={handleShow} className="flex md:hidden">
-             <img src={barsIcon} alt="Bars Icon" />
+              <img src={barsIcon} alt="Bars Icon" />
             </button>
             <div className="hidden  flex-row items-center gap-5 md:flex">
               <a
@@ -49,18 +60,18 @@ const Header = ({ type = "simple" }) => {
               </button>
             </div>
             {showMenu && (
-              <ul
-                className="fixed top-19 left-1/2 md:right-5 md:left-auto md:top-16 transform -translate-x-1/2 w-full md:w-50 bg-bg-main border border-border-medium rounded-md shadow-lg"
-              > {/**gunakan useEffect tapi belajar dulu */}
+              <ul className="fixed top-19 left-1/2 md:right-5 md:left-auto md:top-16 transform -translate-x-1/2 w-full md:w-50 bg-bg-main border border-border-medium rounded-md shadow-lg">
                 {menuItems.map((item) => (
                   <li
-                  key={item.id}
-                    onClick={handleShow}
+                    key={item.id}
+                    onClick={() => {
+                      item.danger ? goLogout() : handleShow();
+                    }}
                     className={`flex flex-row gap-4 p-4 items-center text-base font-medium border-b border-border-medium hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
                       item.danger ? "text-red-500" : "text-text-base"
                     }`}
                   >
-                    {item.label} <img src={item.icon}/>
+                    {item.label} <img src={item.icon} />
                   </li>
                 ))}
               </ul>
